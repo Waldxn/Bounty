@@ -97,8 +97,6 @@ public class BountyCmd implements CommandExecutor {
         bounties.put(player, bounty);
         Bukkit.broadcastMessage(ChatColor.BLACK + "[" + ChatColor.GOLD + "Bounties" + ChatColor.BLACK + "] " + ChatColor.WHITE + "A new bounty of" + ChatColor.GREEN +
                 " $" + bounty.getPrice() + ChatColor.WHITE + " has been placed on " + ChatColor.GOLD + bounty.getTarget().getDisplayName() + "!");
-
-
         return true;
     }
 }
