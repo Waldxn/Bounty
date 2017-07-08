@@ -11,10 +11,11 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class BountyCmd implements CommandExecutor {
 
-    public static final Map<Player, Bounty> bounties = new HashMap<>();
+    public static final Map<UUID, Bounty> bounties = new HashMap<>();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -26,6 +27,7 @@ public class BountyCmd implements CommandExecutor {
         }
 
         Player player = (Player) sender;
+        UUID playerUUID = player.getUniqueId();
 
         if (!player.hasPermission("bounties.use")) {
             player.sendMessage(ChatColor.BLACK + "[" + ChatColor.GOLD + "Bounties" + ChatColor.BLACK + "] " + ChatColor.WHITE +
@@ -39,15 +41,15 @@ public class BountyCmd implements CommandExecutor {
                 return false;
             }
 
-            if (!bounties.containsKey(player)) {
+            if (!bounties.containsKey(playerUUID)) {
                 player.sendMessage("You don't have any bounties to cancel!");
                 return true;
             }
 
-            Bounties.getEconomy().depositPlayer(player, bounties.get(player).getPrice());
+            Bounties.getEconomy().depositPlayer(player, bounties.get(playerUUID).getPrice());
             player.sendMessage(ChatColor.BLACK + "[" + ChatColor.GOLD + "Bounties" + ChatColor.BLACK + "] " + ChatColor.WHITE +
                     "Your bounty has been cancelled!");
-            bounties.remove(player);
+            bounties.remove(playerUUID);
             return true;
         }
 
@@ -80,9 +82,9 @@ public class BountyCmd implements CommandExecutor {
             return true;
         }
 
-        if (bounties.containsKey(player)) {
+        if (bounties.containsKey(playerUUID)) {
             player.sendMessage(ChatColor.BLACK + "[" + ChatColor.GOLD + "Bounties" + ChatColor.BLACK + "] " + ChatColor.WHITE +
-                    "You already have a bounty placed on " + bounties.get(player).getTarget().getDisplayName());
+                    "You already have a bounty placed on " + bounties.get(playerUUID).getTarget().getDisplayName());
             return true;
         }
 
@@ -94,7 +96,7 @@ public class BountyCmd implements CommandExecutor {
 
         Bounties.getEconomy().withdrawPlayer(player, price);
         Bounty bounty = new Bounty(player, target, price);
-        bounties.put(player, bounty);
+        bounties.put(playerUUID, bounty);
         Bukkit.broadcastMessage(ChatColor.BLACK + "[" + ChatColor.GOLD + "Bounties" + ChatColor.BLACK + "] " + ChatColor.WHITE + "A new bounty of" + ChatColor.GREEN +
                 " $" + bounty.getPrice() + ChatColor.WHITE + " has been placed on " + ChatColor.GOLD + bounty.getTarget().getDisplayName() + "!");
         return true;
