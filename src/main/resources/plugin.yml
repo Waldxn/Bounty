@@ -1,0 +1,14 @@
+name: Bounties
+version: ${project.version}
+main: me.waldxn.bounties.Bounties
+depend: [Vault]
+commands:
+  bounty:
+    description: Place a bounties
+    usage: /bounty [player/cancel] <price>
+  bountylist:
+    description: List all bounties
+    usage: /bountylist
+permissions:
+  bounties.use:
+    description: Allows use of bounty commands
